@@ -4,11 +4,10 @@ import org.junit.Test;
 import pt.ipl.isel.gallows_game_bot.dataAccess.WordsRepository;
 import pt.ipl.isel.gallows_game_bot.logic.domain.Gallows;
 import pt.ipl.isel.gallows_game_bot.logic.domain.Word;
+import pt.ipl.isel.gallows_game_bot.transversal.Pair;
 
-import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -88,10 +87,10 @@ public class GallowsServiceTest {
     public void includeContainingLetter() throws Exception {
         GallowsService gallowsService = new GallowsService(new WordsRepository(TWENTY_WORDS_FILE_PATH));
         Gallows gallows = createHelloWorldGallows();
-        Collection<Map.Entry<Integer, Integer>> positions = new LinkedList<>();
-        positions.add(new AbstractMap.SimpleEntry<>(0,2));
-        positions.add(new AbstractMap.SimpleEntry<>(0,3));
-        positions.add(new AbstractMap.SimpleEntry<>(1,3));
+        Collection<Pair<Integer, Integer>> positions = new LinkedList<>();
+        positions.add(new Pair<>(0,2));
+        positions.add(new Pair<>(0,3));
+        positions.add(new Pair<>(1,3));
         gallowsService.include(gallows, 'l', positions);
 
         assertEquals(20, gallows.getDictionary().size());
@@ -153,10 +152,10 @@ public class GallowsServiceTest {
     public void finishSentenceWordsWithOnlyOneDictionaryOption() throws Exception {
         GallowsService gallowsService = new GallowsService(new WordsRepository(TWENTY_WORDS_FILE_PATH));
         Gallows gallows = createHelloWorldGallows();
-        Collection<Map.Entry<Integer, Integer>> positions = new LinkedList<>();
-        positions.add(new AbstractMap.SimpleEntry<>(0,2));
-        positions.add(new AbstractMap.SimpleEntry<>(0,3));
-        positions.add(new AbstractMap.SimpleEntry<>(1,3));
+        Collection<Pair<Integer, Integer>> positions = new LinkedList<>();
+        positions.add(new Pair<>(0,2));
+        positions.add(new Pair<>(0,3));
+        positions.add(new Pair<>(1,3));
 
         gallowsService.include(gallows, 'l', positions);
 
@@ -176,10 +175,10 @@ public class GallowsServiceTest {
     public void getMostProbableLetter() throws Exception {
         GallowsService gallowsService = new GallowsService(new WordsRepository(TWENTY_WORDS_FILE_PATH));
         Gallows gallows = createHelloWorldGallows();
-        Collection<Map.Entry<Integer, Integer>> positions = new LinkedList<>();
-        positions.add(new AbstractMap.SimpleEntry<>(0,2));
-        positions.add(new AbstractMap.SimpleEntry<>(0,3));
-        positions.add(new AbstractMap.SimpleEntry<>(1,3));
+        Collection<Pair<Integer, Integer>> positions = new LinkedList<>();
+        positions.add(new Pair<>(0,2));
+        positions.add(new Pair<>(0,3));
+        positions.add(new Pair<>(1,3));
 
         gallowsService.cleanDictionary(gallows);
         gallowsService.include(gallows, 'l', positions);

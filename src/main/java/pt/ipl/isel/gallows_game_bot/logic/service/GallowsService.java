@@ -2,6 +2,7 @@ package pt.ipl.isel.gallows_game_bot.logic.service;
 
 import pt.ipl.isel.gallows_game_bot.dataAccess.IWordsRepository;
 import pt.ipl.isel.gallows_game_bot.logic.domain.*;
+import pt.ipl.isel.gallows_game_bot.transversal.Pair;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -36,7 +37,7 @@ public class GallowsService {
     }
 
 
-    public void include(Gallows gallows, Character letter, Collection<Map.Entry<Integer, Integer>> positions) {
+    public void include(Gallows gallows, Character letter, Collection<Pair<Integer, Integer>> positions) {
         if(gallows == null)
             throw new IllegalArgumentException("Gallows cannot be null!");
 
@@ -50,7 +51,7 @@ public class GallowsService {
 
         Word sentenceWord;
         Letter sentenceWordLetter;
-        for(Map.Entry<Integer, Integer> position : positions) {
+        for(Pair<Integer, Integer> position : positions) {
             sentenceWord = sentence.getWordAt(position.getKey());
             sentenceWordLetter = sentenceWord.getLetterAt(position.getValue());
             sentenceWordLetter.setCharacter(letter);

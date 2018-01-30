@@ -3,9 +3,9 @@ package pt.ipl.isel.gallows_game_bot.logic.service;
 import pt.ipl.isel.gallows_game_bot.dataAccess.IWordsRepository;
 import pt.ipl.isel.gallows_game_bot.logic.domain.Gallows;
 import pt.ipl.isel.gallows_game_bot.logic.domain.Word;
+import pt.ipl.isel.gallows_game_bot.transversal.Pair;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -19,7 +19,7 @@ public class GallowsEngine {
 
     private Supplier<Collection<Integer>> wordsLengthSupplier;
     private Predicate<Character> letterPredicate;
-    private Function<Character, Collection<Map.Entry<Integer, Integer>>> letterPositionsFunction;
+    private Function<Character, Collection<Pair<Integer, Integer>>> letterPositionsFunction;
     private Predicate<Word> completeWordPredicate;
     private Consumer<String> logger;
     private GallowsService gallowsService;
@@ -30,7 +30,7 @@ public class GallowsEngine {
     public GallowsEngine(IWordsRepository wordsRepository,
                         Supplier<Collection<Integer>> wordsLengthSupplier,
                         Predicate<Character> letterPredicate,
-                        Function<Character, Collection<Map.Entry<Integer, Integer>>> letterPositionsFunction,
+                        Function<Character, Collection<Pair<Integer, Integer>>> letterPositionsFunction,
                         Predicate<Word> completeWordPredicate,
                         Consumer<String> logger) {
 

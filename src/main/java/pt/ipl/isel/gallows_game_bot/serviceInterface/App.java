@@ -6,13 +6,12 @@ import pt.ipl.isel.gallows_game_bot.logic.domain.Sentence;
 import pt.ipl.isel.gallows_game_bot.logic.domain.Word;
 import pt.ipl.isel.gallows_game_bot.logic.service.GallowsEngine;
 import pt.ipl.isel.gallows_game_bot.logic.service.SentenceService;
+import pt.ipl.isel.gallows_game_bot.transversal.Pair;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -30,7 +29,7 @@ public class App {
         IWordsRepository wordsRepository = new WordsRepository(WORDS_FILE);
         Supplier<Collection<Integer>> wordsLengthSupplier = getWordsLengthSupplier();
         Predicate<Character> letterPredicate = getLetterPredicate();
-        Function<Character, Collection<Map.Entry<Integer, Integer>>> letterPositionsFunction = getLetterPositionsFunction();
+        Function<Character, Collection<Pair<Integer, Integer>>> letterPositionsFunction = getLetterPositionsFunction();
         Predicate<Word> completeWordPredicate = getCompleteWordPredicate();
         Consumer<String> logger = System.out::println;
 
@@ -79,7 +78,7 @@ public class App {
         };
     }
 
-    public static Function<Character,Collection<Map.Entry<Integer,Integer>>> getLetterPositionsFunction() {
+    public static Function<Character,Collection<Pair<Integer,Integer>>> getLetterPositionsFunction() {
        return (letter) -> {
             try {
                 if(AUTO)
@@ -134,18 +133,18 @@ public class App {
         return askIfContainsLetter(letter);
     }
 
-    private static Collection<Map.Entry<Integer, Integer>> askForLetterPositions() throws Exception {
+    private static Collection<Pair<Integer, Integer>> askForLetterPositions() throws Exception {
         System.out.println("Insert letter positions in format [(wordPosition) (letterPosition)]. To stop press enter.");
 
-        Map.Entry<Integer, Integer> position;
-        Collection<Map.Entry<Integer, Integer>> positions = new LinkedList<>();
+        Pair<Integer, Integer> position;
+        Collection<Pair<Integer, Integer>> positions = new LinkedList<>();
         while((position = getLetterPosition()) != null)
             positions.add(position);
 
         return positions;
     }
 
-    private static Map.Entry<Integer, Integer> getLetterPosition() throws Exception {
+    private static Pair<Integer, Integer> getLetterPosition() throws Exception {
         String pos = ask();
 
         if(pos == null || pos.isEmpty())
@@ -158,7 +157,7 @@ public class App {
             return getLetterPosition();
         }
 
-        return new AbstractMap.SimpleEntry<Integer, Integer>(Integer.parseInt(positions[0])-1, Integer.parseInt(positions[1])-1);
+        return new Pair<>(Integer.parseInt(positions[0])-1, Integer.parseInt(positions[1])-1);
     }
 
     private static boolean askForFoundWord(Word word) throws Exception {
@@ -175,14 +174,14 @@ public class App {
         return askForFoundWord(word);
     }
 
-    private static Collection<Map.Entry<Integer, Integer>> getLetterPositions(Character character) {
-        Collection<Map.Entry<Integer, Integer>> positions = new LinkedList<>();
+    private static Collection<Pair<Integer, Integer>> getLetterPositions(Character character) {
+        Collection<Pair<Integer, Integer>> positions = new LinkedList<>();
         Sentence sentence = new SentenceService().createSentence(SENTENCE);
 
         for(int wordIdx=0; wordIdx<sentence.getWords().size(); ++wordIdx) {
             for(int letterIdx = 0; letterIdx<sentence.getWordAt(wordIdx).length(); ++letterIdx){
                 if(sentence.getWordAt(wordIdx).getLetterAt(letterIdx).getCharacter() == character)
-                    positions.add(new AbstractMap.SimpleEntry<>(wordIdx, letterIdx));
+                    positions.add(new Pair<>(wordIdx, letterIdx));
             }
         }
 

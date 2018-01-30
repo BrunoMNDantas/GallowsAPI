@@ -3,6 +3,7 @@ package pt.ipl.isel.gallows_game_bot.logic.service;
 import org.junit.Test;
 import pt.ipl.isel.gallows_game_bot.dataAccess.WordsRepository;
 import pt.ipl.isel.gallows_game_bot.logic.domain.Sentence;
+import pt.ipl.isel.gallows_game_bot.transversal.Pair;
 
 import java.util.AbstractMap;
 import java.util.Collection;
@@ -116,18 +117,17 @@ public class GallowsEngineTest {
                 },
                 (letter) -> "at window".contains(Character.toString(letter)),
                 (letter) -> {
-                    Collection<Map.Entry<Integer, Integer>> positions = new LinkedList<>();
+                    Collection<Pair<Integer, Integer>> positions = new LinkedList<>();
                     Sentence sentence = new SentenceService().createSentence("at window");
 
                     for(int wordIdx=0; wordIdx<sentence.getWords().size(); ++wordIdx) {
                         for(int letterIdx = 0; letterIdx<sentence.getWordAt(wordIdx).length(); ++letterIdx){
                             if(sentence.getWordAt(wordIdx).getLetterAt(letterIdx).getCharacter() == letter)
-                                positions.add(new AbstractMap.SimpleEntry<>(wordIdx, letterIdx));
+                                positions.add(new Pair<>(wordIdx, letterIdx));
                         }
                     }
 
                     return positions;
-
                 },
                 (word) -> "at window".contains(word.toString()),
                 System.out::println
@@ -150,13 +150,13 @@ public class GallowsEngineTest {
                 },
                 (letter) -> "at cinema".contains(Character.toString(letter)),
                 (letter) -> {
-                    Collection<Map.Entry<Integer, Integer>> positions = new LinkedList<>();
+                    Collection<Pair<Integer, Integer>> positions = new LinkedList<>();
                     Sentence sentence = new SentenceService().createSentence("at cinema");
 
                     for(int wordIdx=0; wordIdx<sentence.getWords().size(); ++wordIdx) {
                         for(int letterIdx = 0; letterIdx<sentence.getWordAt(wordIdx).length(); ++letterIdx){
                             if(sentence.getWordAt(wordIdx).getLetterAt(letterIdx).getCharacter() == letter)
-                                positions.add(new AbstractMap.SimpleEntry<>(wordIdx, letterIdx));
+                                positions.add(new Pair<>(wordIdx, letterIdx));
                         }
                     }
 
