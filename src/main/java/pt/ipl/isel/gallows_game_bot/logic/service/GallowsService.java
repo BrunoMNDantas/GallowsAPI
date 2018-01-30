@@ -181,15 +181,8 @@ public class GallowsService {
     }
 
     private boolean canBeSameWord(Word sentenceWord, Word dictionaryWord){
-        if(sentenceWord.length() != dictionaryWord.length())
-            return false;
-
-        for(int i=0; i<sentenceWord.length(); ++i)
-            if( letterService.isDefined(sentenceWord.getLetterAt(i)) &&
-                !dictionaryWord.getLetterAt(i).equals(sentenceWord.getLetterAt(i)))
-                return false;
-
-        return true;
+        String regex = wordService.createRegex(sentenceWord);
+        return dictionaryWord.matches(regex);
     }
 
     private void finishWord(Word sentenceWord, Word dictionaryWord) {

@@ -80,7 +80,7 @@ public class GallowsEngine {
             logger.accept(gallows.getSentence().toString().replace(LetterService.UNDEFINED_CHAR, UNKNOWN_CHAR));
         }
 
-        if(gallows.getDictionary().size() == 0)
+        if(gallows.getDictionary().size() == 0 && !sentenceService.isDefined(gallows.getSentence()))
             return null;
         else
             return gallows.getSentence().toString();
