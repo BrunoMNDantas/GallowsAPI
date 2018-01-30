@@ -196,7 +196,7 @@ public class WordServiceTest {
         Word word = wordService.createWord("ABC");
         String regex = wordService.createRegex(word);
 
-        assertEquals("ABC", regex);
+        assertEquals("^ABC", regex);
     }
 
     @Test
@@ -205,7 +205,7 @@ public class WordServiceTest {
         Word word = wordService.createWord("ABC" + LetterService.UNDEFINED_CHAR);
         String regex = wordService.createRegex(word);
 
-        assertEquals("ABC.", regex);
+        assertEquals("^ABC.", regex);
     }
 
 }

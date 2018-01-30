@@ -75,7 +75,7 @@ public class SentenceService {
         StringBuilder sb = new StringBuilder();
 
         for(int i=0; i<sentence.getWords().size(); ++i) {
-            sb.append(wordService.createRegex(sentence.getWordAt(i)));
+            sb.append(wordService.createRegex(sentence.getWordAt(i)).replace("^", ""));
 
             if(i != sentence.getWords().size()-1)
                 sb.append(" ");

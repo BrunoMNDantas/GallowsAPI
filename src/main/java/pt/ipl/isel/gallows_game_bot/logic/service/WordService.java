@@ -71,7 +71,10 @@ public class WordService {
         for(Letter letter : word.getLetters())
             sb.append(letterService.createRegex(letter));
 
-        return sb.toString();
+        if(sb.length() == 0)
+            return "";
+
+        return "^" + sb.toString();
     }
 
 }

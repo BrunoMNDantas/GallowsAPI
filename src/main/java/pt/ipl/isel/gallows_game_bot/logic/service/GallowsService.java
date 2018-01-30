@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class GallowsService {
@@ -15,6 +16,7 @@ public class GallowsService {
     private WordService wordService = new WordService();
     private SentenceService sentenceService = new SentenceService();
     private DictionaryService dictionaryService;
+
 
 
     public GallowsService(IWordsRepository repository) {
@@ -54,7 +56,7 @@ public class GallowsService {
             sentenceWordLetter.setCharacter(letter);
         }
 
-        if(sentence.getWords().size() == 1) // cannot remove words without letter it may be possible to exist words withoutu that letter
+        if(sentence.getWords().size() == 1) // cannot remove words without letter it may be possible to exist words without that letter
             dictionaryService.filterWordsWithLetter(gallows.getDictionary(), letter);
 
         gallows.getIncluded().add(letter);
@@ -77,44 +79,59 @@ public class GallowsService {
         if(gallows == null)
             throw new IllegalArgumentException("Gallows cannot be null!");
 
+        Predicate<Word> lengthPredicate = createLengthPredicate(gallows);
+        Predicate<Word> patternPredicate = createPatternPredicate(gallows);
+        Predicate<Word> excludeLetterPredicate = createExcludeLetterPredicate(gallows);
+
         Dictionary dictionary = gallows.getDictionary();
-        Sentence sentence = gallows.getSentence();
 
-        dictionaryService.filterWordsByAcceptedLength(dictionary, getUnknownWordsLengths(sentence));
-
-        removeDictionaryWordsWhichCantBeOnSentence(dictionary, sentence);
+        dictionary.setWords(
+                dictionary.getWords()
+                        .stream()
+                        .filter((word) ->
+                                lengthPredicate.test(word) &&
+                                patternPredicate.test(word) &&
+                                excludeLetterPredicate.test(word))
+                        .collect(Collectors.toList()));
     }
 
-    private Collection<Integer> getUnknownWordsLengths(Sentence sentence) {
-        Collection<Integer> lengths = new LinkedList<>();
+    private Predicate<Word> createLengthPredicate(Gallows gallows) {
+        Collection<Word> undefinedWords = getUndefinedWords(gallows.getSentence());
 
-        for(Word word : sentence.getWords())
-            if(!wordService.isDefined(word) && !lengths.contains(word.length()))
-                lengths.add(word.length());
+        Collection<Integer> acceptedLengths = new LinkedList<>();
 
-        return lengths;
+        for(Word word : undefinedWords)
+            if(!acceptedLengths.contains(word.length()))
+                acceptedLengths.add(word.length());
+
+        return (word) -> acceptedLengths.contains(word.length());
     }
 
-    private void removeDictionaryWordsWhichCantBeOnSentence(Dictionary dictionary, Sentence sentence) {
-        Collection<Word> undefinedWords = getUndefinedWords(sentence);
-        Collection<Word> removeFromDictionary = new LinkedList<>();
+    private Predicate<Word> createPatternPredicate(Gallows gallows) {
+        Collection<Word> undefinedWords = getUndefinedWords(gallows.getSentence());
 
-        boolean remove;
-        for(Word dictionaryWord : dictionary.getWords()) {
-            remove = true;
+        Collection<String> patterns = new LinkedList<>();
 
-            for(Word sentenceWord : undefinedWords){
-                if(canBeSameWord(sentenceWord, dictionaryWord)){
-                    remove = false;
-                    break;
-                }
-            }
+        for(Word word : undefinedWords)
+            patterns.add(wordService.createRegex(word));
 
-            if(remove)
-                removeFromDictionary.add(dictionaryWord);
-        }
+        return (word) -> {
+            for(String regex : patterns)
+                if(word.matches(regex))
+                    return true;
 
-        dictionary.getWords().removeAll(removeFromDictionary);
+            return false;
+        };
+    }
+
+    private Predicate<Word> createExcludeLetterPredicate(Gallows gallows) {
+        return (word) -> {
+            for(Character character : gallows.getExcluded())
+                if(word.contains(Character.toString(character)))
+                    return false;
+
+            return true;
+        };
     }
 
     private Collection<Word> getUndefinedWords(Sentence sentence) {
