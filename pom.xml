@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<modelVersion>4.0.0</modelVersion>
+
+<groupId>pt.ipl.isel</groupId>
+<artifactId>gallows_game_bot</artifactId>
+<packaging>jar</packaging>
+
+<parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>1.5.2.RELEASE</version>
+    <relativePath/> <!-- lookup parent from repository -->
+</parent>
+
+<properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.version>1.8</java.version>
+    <!--<tomcat.version>8.0.28</tomcat.version>-->
+</properties>
+
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.session</groupId>
+        <artifactId>spring-session</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-tomcat</artifactId>
+    </dependency>
+
+    <!-->SWAGGER<-->
+    <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger2</artifactId>
+        <version>2.3.1</version>
+    </dependency>
+    <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger-ui</artifactId>
+        <version>2.3.1</version>
+    </dependency>
+    <dependency>
+        <groupId>com.mangofactory</groupId>
+        <artifactId>swagger-springmvc</artifactId>
+        <version>1.0.2</version>
+    </dependency>
+
+    <!-->S3<-->
+    <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk-s3</artifactId>
+        <version>1.11.125</version>
+    </dependency>
+
+    <!-->JDBC POSTGRES<-->
+    <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+    </dependency>
+
+    <!-->JPA<-->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+
+    <!-->HIBERNATE<-->
+    <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>javax.validation</groupId>
+        <artifactId>validation-api</artifactId>
+        <version>1.1.0.Final</version>
+    </dependency>
+    <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-validator</artifactId>
+        <version>5.2.4.Final</version>
+    </dependency>
+
+    <!-->APACHE<-->
+    <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>2.4</version>
+    </dependency>
+
+    <!-->JUnit<-->
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.12</version>
+        <scope>test</scope>
+    </dependency>
+
+</dependencies>
+
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+        </plugin>
+
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>appassembler-maven-plugin</artifactId>
+            <version>1.1.1</version>
+            <configuration>
+                <assembleDirectory>target</assembleDirectory>
+                <programs>
+                    <program>
+                        <mainClass>launch.Main</mainClass>
+                        <name>webapp</name>
+                    </program>
+                </programs>
+            </configuration>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>assemble</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>2.4</version>
+            <executions>
+                <execution>
+                    <id>copy-dependencies</id>
+                    <phase>package</phase>
+                    <goals><goal>copy-dependencies</goal></goals>
+                </execution>
+            </executions>
+        </plugin>
+
+    </plugins>
+</build>
+
+</project>

@@ -1,0 +1,10 @@
+i
+at
+put
+car
+home
+take
+window
+computer
+building
+television
