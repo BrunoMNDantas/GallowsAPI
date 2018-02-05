@@ -3,8 +3,10 @@ package pt.ipl.isel.gallows_game_bot.serviceInterface;
 import org.springframework.web.bind.annotation.*;
 import pt.ipl.isel.gallows_game_bot.dataAccess.WordsRepository;
 import pt.ipl.isel.gallows_game_bot.logic.domain.Gallows;
+import pt.ipl.isel.gallows_game_bot.logic.domain.Sentence;
 import pt.ipl.isel.gallows_game_bot.logic.domain.Word;
 import pt.ipl.isel.gallows_game_bot.logic.service.GallowsService;
+import pt.ipl.isel.gallows_game_bot.logic.service.SentenceService;
 import pt.ipl.isel.gallows_game_bot.logic.service.ServiceException;
 import pt.ipl.isel.gallows_game_bot.transversal.Pair;
 
@@ -44,6 +46,7 @@ public class GallowsController {
 
 
     private GallowsService gallowsService = new GallowsService(new WordsRepository(WORDS_FILE));
+    private SentenceService sentenceService = new SentenceService();
 
 
 
@@ -86,6 +89,19 @@ public class GallowsController {
         Gallows gallows = get(gallowsId);
         Collection<Word> finishedWords = gallowsService.finishSentenceWordsWithOnlyOneDictionaryOption(gallows);
         return finishedWords.stream().map(Word::toString).collect(Collectors.toList());
+    }
+
+    @RequestMapping(value = "isfinished", method = RequestMethod.GET)
+    public boolean isFinished(@RequestParam UUID gallowsId) {
+        Gallows gallows = get(gallowsId);
+        return sentenceService.isDefined(gallows.getSentence()) || gallows.getDictionary().size()==0;
+    }
+
+    @RequestMapping(value = "sentence", method = RequestMethod.GET)
+    public String getSentente(@RequestParam UUID gallowsId) {
+        Gallows gallows = get(gallowsId);
+        Sentence sentence = gallows.getSentence();
+        return sentence.toString();
     }
 
 }
