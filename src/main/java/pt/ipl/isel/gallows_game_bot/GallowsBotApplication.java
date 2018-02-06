@@ -15,7 +15,6 @@ public class GallowsBotApplication {
     public static void main(String[] args) {
         LOGGER.info("::STARTING::");
 
-        System.out.println("ABC".matches(""));
         SpringApplication.run(GallowsBotApplication.class, args);
 
         LOGGER.info("::RUNNING::");
